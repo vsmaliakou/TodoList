@@ -11,7 +11,7 @@ export type TaskType = {
     title: string
     isDone: boolean
 }
-type TodolistType = {
+export type TodolistType = {
     id: string
     title: string
     filter: FilterValuesType
@@ -45,20 +45,12 @@ function App() {
         ],
     })
 
+    //function for tasks
     function removeTask(taskID: string, todolistID: string) {
         const todolistTasks = tasks[todolistID]
         tasks[todolistID] = todolistTasks.filter(t => t.id !== taskID)
         setTasks({...tasks})
     }
-
-    function changeFilter(newFilterValue: FilterValuesType, todolistID: string) {
-        const todolist = todoLists.find(t => t.id === todolistID)
-        if (todolist) {
-            todolist.filter = newFilterValue
-            setTodoLists([...todoLists])
-        }
-    }
-
     function addTask(taskTitle: string, todolistID: string) {
         const newTask: TaskType = {
             id: v1(),
@@ -69,7 +61,6 @@ function App() {
         tasks[todolistID] = [...todolistTasks, newTask]
         setTasks({...tasks})
     }
-
     function changeStatus(taskID: string, isDone: boolean, todolistID: string) {
         const todolistTasks = tasks[todolistID]
         const task: TaskType | undefined = todolistTasks.find(t => t.id === taskID)
@@ -78,7 +69,6 @@ function App() {
             setTasks({...tasks})
         }
     }
-
     function changeTaskTitle(taskID: string, title: string, todolistID: string) {
         const todolistTasks = tasks[todolistID]
         const task: TaskType | undefined = todolistTasks.find(t => t.id === taskID)
@@ -88,12 +78,19 @@ function App() {
         }
     }
 
+    //function for Todolist
+    function changeFilter(newFilterValue: FilterValuesType, todolistID: string) {
+        const todolist = todoLists.find(t => t.id === todolistID)
+        if (todolist) {
+            todolist.filter = newFilterValue
+            setTodoLists([...todoLists])
+        }
+    }
     function removeTodolist(todolistId: string) {
         setTodoLists(todoLists.filter(tl => tl.id !== todolistId))
         delete tasks[todolistId]
         setTasks({...tasks})
     }
-
     function addTodolist(title: string) {
         const newTodolistID = v1()
         const newTodolist: TodolistType = {
@@ -104,7 +101,6 @@ function App() {
         setTodoLists([newTodolist, ...todoLists])
         setTasks({...tasks, [newTodolistID]: []})
     }
-
     function changeTodolistTitle(title: string, todolistID: string) {
         const todolist = todoLists.find(tl => tl.id === todolistID)
         if (todolist) {
